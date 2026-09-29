@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — RepairShop</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        color: #e5e7eb;
+        background: #1e1b4b;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    nav {
+        position: sticky;
+        top: 0;
+        background: rgba(30, 27, 75, 0.85);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        padding: 16px 8%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+    }
+
+    .logo {
+        font-size: 22px;
+        font-weight: 800;
+        color: #ffffff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .logo span { color: #a78bfa; }
+    .logo::before { content: "🔧"; font-size: 24px; }
+
+    .nav-links {
+        display: flex;
+        gap: 26px;
+        align-items: center;
+        list-style: none;
+    }
+
+    .nav-links a {
+        color: #c4b5fd;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: #ffffff; }
+
+    .main {
+        flex: 1;
+        padding: 60px 8%;
+        background: radial-gradient(ellipse at top right, #3b2d7a 0%, transparent 55%),
+                    radial-gradient(ellipse at bottom left, #312e81 0%, transparent 55%),
+                    linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .main::before {
+        content: "";
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 70%);
+        border-radius: 50%;
+        filter: blur(40px);
+        pointer-events: none;
+    }
+
+    .main::after {
+        content: "";
+        position: absolute;
+        bottom: -120px;
+        left: -120px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        filter: blur(40px);
+        pointer-events: none;
+    }
+
+    .form-card {
+        position: relative;
+        z-index: 1;
+        background: rgba(30, 27, 75, 0.6);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-radius: 24px;
+        padding: 45px 40px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(16px);
+        animation: cardIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes cardIn {
+        0%   { opacity: 0; transform: scale(0.95) translateY(20px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .form-card h1 {
+        font-size: 30px;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 6px;
+        letter-spacing: -0.5px;
+    }
+
+    .form-card h1 span {
+        background: linear-gradient(135deg, #a78bfa 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .form-card .subtitle {
+        color: #c4b5fd;
+        font-size: 14.5px;
+        margin-bottom: 28px;
+    }
+
+    .field { margin-bottom: 18px; }
+
+    .field label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #c4b5fd;
+        margin-bottom: 6px;
+        letter-spacing: 0.3px;
+    }
+
+    .field label span { color: #a78bfa; }
+
+    .field input {
+        width: 100%;
+        padding: 13px 16px;
+        background: rgba(139, 92, 246, 0.08);
+        border: 1.5px solid rgba(139, 92, 246, 0.25);
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 14.5px;
+        font-family: inherit;
+        transition: all 0.2s;
+        outline: none;
+    }
+
+    .field input::placeholder { color: #7c7a9c; }
+
+    .field input:focus {
+        border-color: #a78bfa;
+        background: rgba(139, 92, 246, 0.15);
+        box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 30px;
+        font-size: 15.5px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.25s;
+        margin-top: 10px;
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        letter-spacing: 0.3px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(139, 92, 246, 0.6);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .error-msg {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: #fca5a5;
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-size: 13.5px;
+        margin-bottom: 20px;
+        display: none;
+        animation: shake 0.4s;
+    }
+
+    .error-msg.show { display: block; }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-6px); }
+        75% { transform: translateX(6px); }
+    }
+
+    .success-msg {
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #6ee7b7;
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-size: 13.5px;
+        margin-bottom: 20px;
+        display: none;
+        text-align: center;
+    }
+
+    .success-msg.show { display: block; }
+
+    .bottom-link {
+        text-align: center;
+        margin-top: 22px;
+        font-size: 14px;
+        color: #a5b4fc;
+    }
+
+    .bottom-link a {
+        color: #a78bfa;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .bottom-link a:hover {
+        color: #c4b5fd;
+        text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+        nav { padding: 14px 6%; }
+        .main { padding: 40px 6%; }
+        .form-card { padding: 32px 24px; }
+        .form-card h1 { font-size: 24px; }
+    }
+</style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">Repair<span>Shop</span></a>
+    <ul class="nav-links">
+        <li><a href="landing.html">Home</a></li>
+        <li><a href="register.html">Register</a></li>
+    </ul>
+</nav>
+
+<div class="main">
+    <div class="form-card">
+        <h1>Welcome <span>Back</span></h1>
+        <p class="subtitle">Login to access your account and Learn More</p>
+
+        <div class="error-msg" id="errorMsg"></div>
+        <div class="success-msg" id="successMsg"></div>
+
+        <form id="loginForm" autocomplete="off">
+            <div class="field">
+                <label>Username or Email <span>*</span></label>
+                <input type="text" id="identifier" placeholder="juandc or juan@email.com" required autofocus>
+            </div>
+
+            <div class="field">
+                <label>Password <span>*</span></label>
+                <input type="password" id="password" placeholder="Your password" required>
+            </div>
+
+            <button type="submit" class="btn-submit" id="loginBtn">Login</button>
+        </form>
+
+        <p class="bottom-link">
+            Don't have an account? <a href="register.html">Register here</a>
+        </p>
+    </div>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+    const loginBtn = document.getElementById('loginBtn');
+
+    errorMsg.classList.remove('show');
+    successMsg.classList.remove('show');
+
+    const identifier = document.getElementById('identifier').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!identifier || !password) {
+        errorMsg.innerHTML = 'Please enter both fields.';
+        errorMsg.classList.add('show');
+        return;
+    }
+
+    loginBtn.textContent = 'Logging in...';
+    loginBtn.disabled = true;
+
+    try {
+        const res = await fetch('/netlify/functions/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ identifier, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            errorMsg.innerHTML = data.error || 'Login failed.';
+            errorMsg.classList.add('show');
+            loginBtn.textContent = 'Login';
+            loginBtn.disabled = false;
+            return;
+        }
+
+        sessionStorage.setItem('repairshop_logged_in', 'true');
+        sessionStorage.setItem('repairshop_current_user', JSON.stringify(data.user));
+
+        successMsg.innerHTML = '✓ Welcome back, ' + data.user.full_name + '! Redirecting...';
+        successMsg.classList.add('show');
+
+        setTimeout(() => {
+            window.location.href = 'learn-more.html';
+        }, 1100);
+
+    } catch (err) {
+        errorMsg.innerHTML = 'Network error. Please try again.';
+        errorMsg.classList.add('show');
+        loginBtn.textContent = 'Login';
+        loginBtn.disabled = false;
+    }
+});
+</script>
+
+</body>
+</html>

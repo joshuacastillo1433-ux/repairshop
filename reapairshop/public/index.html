@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RepairShop — Service Record Management System</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        color: #e5e7eb;
+        background: #1e1b4b;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    nav {
+        position: sticky;
+        top: 0;
+        background: rgba(30, 27, 75, 0.85);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        padding: 16px 8%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+    }
+
+    .logo {
+        font-size: 22px;
+        font-weight: 800;
+        color: #ffffff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .logo span { color: #a78bfa; }
+    .logo::before { content: "🔧"; font-size: 24px; }
+
+    .nav-links {
+        display: flex;
+        gap: 26px;
+        align-items: center;
+        list-style: none;
+    }
+
+    .nav-links a {
+        color: #c4b5fd;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: #ffffff; }
+
+    .nav-btn {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        color: #ffffff !important;
+        padding: 10px 24px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.25s;
+        box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 22px rgba(139, 92, 246, 0.6);
+    }
+
+    .hero {
+        flex: 1;
+        padding: 90px 8%;
+        background: radial-gradient(ellipse at top right, #3b2d7a 0%, transparent 55%),
+                    radial-gradient(ellipse at bottom left, #312e81 0%, transparent 55%),
+                    linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%);
+        color: #e5e7eb;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 60px;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.35) 0%, transparent 70%);
+        border-radius: 50%;
+        filter: blur(40px);
+        pointer-events: none;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        bottom: -120px;
+        left: -120px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+        border-radius: 50%;
+        filter: blur(40px);
+        pointer-events: none;
+    }
+
+    .hero-text { position: relative; z-index: 1; }
+
+    .hero-text .tagline {
+        display: inline-block;
+        background: rgba(139, 92, 246, 0.2);
+        color: #c4b5fd;
+        padding: 6px 16px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .hero-text h1 {
+        font-size: 48px;
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 22px;
+        letter-spacing: -0.8px;
+        color: #ffffff;
+    }
+
+    .hero-text h1 span {
+        background: linear-gradient(135deg, #a78bfa 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-text p {
+        font-size: 17px;
+        color: #c4b5fd;
+        margin-bottom: 32px;
+        max-width: 540px;
+    }
+
+    .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn {
+        display: inline-block;
+        padding: 14px 30px;
+        border-radius: 30px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: all 0.25s;
+        font-family: inherit;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+        color: #ffffff;
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(139, 92, 246, 0.6);
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: #c4b5fd;
+        border: 2px solid rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-outline:hover {
+        background: rgba(139, 92, 246, 0.15);
+        color: #ffffff;
+        border-color: #a78bfa;
+        transform: translateY(-3px);
+    }
+
+    .hero-card {
+        position: relative;
+        z-index: 1;
+        background: rgba(30, 27, 75, 0.6);
+        border: 1px solid rgba(139, 92, 246, 0.25);
+        border-radius: 24px;
+        padding: 32px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(16px);
+    }
+
+    .hero-card h3 {
+        font-size: 12px;
+        font-weight: 800;
+        color: #a78bfa;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .hero-card h3::before {
+        content: "";
+        display: inline-block;
+        width: 24px;
+        height: 2px;
+        background: #a78bfa;
+        border-radius: 2px;
+    }
+
+    .stat-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px;
+        border-radius: 14px;
+        transition: all 0.25s;
+        margin-bottom: 4px;
+        border: 1px solid transparent;
+    }
+
+    .stat-row:hover {
+        background: rgba(139, 92, 246, 0.12);
+        border-color: rgba(139, 92, 246, 0.25);
+        transform: translateX(4px);
+    }
+
+    .stat-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        color: #c4b5fd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .stat-info strong {
+        display: block;
+        font-size: 15px;
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .stat-info span {
+        font-size: 13px;
+        color: #a5b4fc;
+    }
+
+    /* Toast */
+    .toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: rgba(30, 27, 75, 0.95);
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        color: #ffffff;
+        padding: 16px 26px;
+        border-radius: 30px;
+        font-size: 14.5px;
+        font-weight: 500;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(16px);
+        z-index: 9999;
+        opacity: 0;
+        transition: all 0.4s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        max-width: 90%;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    .toast .icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+        .hero {
+            grid-template-columns: 1fr;
+            padding: 60px 6%;
+            text-align: center;
+        }
+
+        .hero-text h1 { font-size: 34px; }
+        .hero-text p { margin-left: auto; margin-right: auto; }
+        .hero-buttons { justify-content: center; }
+        .hero-card { padding: 24px; }
+        .hero-card h3 { justify-content: center; }
+        .hero-card h3::before { display: none; }
+
+        nav { padding: 14px 6%; }
+        .nav-links { gap: 14px; }
+    }
+
+    @media (max-width: 480px) {
+        .hero-text h1 { font-size: 28px; }
+        .btn { padding: 12px 22px; font-size: 14px; }
+        .hero { padding: 40px 5%; }
+    }
+</style>
+</head>
+<body>
+
+<nav>
+    <a href="index.html" class="logo">Repair<span>Shop</span></a>
+    <ul class="nav-links">
+        <li><a href="register.html" class="nav-btn">Registration</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <div class="hero-text">
+        <span class="tagline">✨ Service Management Made Simple</span>
+        <h1>Manage Repairs <span>Smarter</span>,<br>Not Harder.</h1>
+        <p>
+            A complete Service Record Management System for automotive and
+            appliance repair shops. Track customers, vehicles, repairs, and
+            service history — all in one place.
+        </p>
+        <div class="hero-buttons">
+            <a href="#" onclick="handleLearnMore(event)" class="btn btn-outline" id="learnMoreBtn">
+                Learn More <span id="lockIcon">🔒</span>
+            </a>
+            <a href="register.html" class="btn btn-primary">Register Now →</a>
+        </div>
+    </div>
+
+    <div class="hero-card">
+        <h3>System at a Glance</h3>
+
+        <div class="stat-row">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+                <strong>Service Records</strong>
+                <span>Track every repair from start to finish</span>
+            </div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-icon">🚗</div>
+            <div class="stat-info">
+                <strong>Vehicles &amp; Appliances</strong>
+                <span>Manage all customer items in one place</span>
+            </div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-icon">🔧</div>
+            <div class="stat-info">
+                <strong>Technician Workflow</strong>
+                <span>Assign, diagnose, repair, and complete</span>
+            </div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <strong>Reports &amp; Analytics</strong>
+                <span>Revenue, technician performance, service stats</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="toast" id="toast">
+    <div class="icon">🔒</div>
+    <span id="toastText">Please register first to view Learn More.</span>
+</div>
+
+<script>
+// ================== LEARN MORE HANDLER ==================
+function handleLearnMore(e) {
+    e.preventDefault();
+
+    // Check if user is CURRENTLY LOGGED IN
+    const isLoggedIn = sessionStorage.getItem('repairshop_logged_in') === 'true';
+
+    if (!isLoggedIn) {
+        // Not logged in → show toast and redirect to register
+        showToast('Please register first to view Learn More.');
+        setTimeout(() => {
+            window.location.href = 'register.html';
+        }, 1400);
+    } else {
+        // Logged in → go to Learn More
+        window.location.href = 'learn-more.html';
+    }
+}
+
+// ================== TOAST ==================
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastText').textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ================== UPDATE UI ON LOAD ==================
+window.addEventListener('DOMContentLoaded', function() {
+    const isLoggedIn = localStorage.getItem('repairshop_logged_in') === 'true';
+    const lockIcon = document.getElementById('lockIcon');
+
+    if (isLoggedIn) {
+        // Logged in → remove lock
+        lockIcon.style.display = 'none';
+    } else {
+        // Not logged in → show lock
+        lockIcon.style.display = 'inline';
+    }
+});
+
+// ================== SYNC ACROSS TABS ==================
+window.addEventListener('storage', function(e) {
+    if (e.key === 'repairshop_logged_in') {
+        const isLoggedIn = e.newValue === 'true';
+        const lockIcon = document.getElementById('lockIcon');
+        lockIcon.style.display = isLoggedIn ? 'none' : 'inline';
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "repairshop",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0",
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^2.8.1",
+    "typescript": "^5.4.0"
+  }
+}
