@@ -346,17 +346,18 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 
         successMsg.innerHTML = '✓ Account created! Redirecting to Learn More...';
         successMsg.classList.add('show');
-
+       
         setTimeout(() => {
             window.location.href = 'learn-more.html';
         }, 1200);
 
-    } catch (err) {
-        errorMsg.innerHTML = 'Network error. Please try again.';
-        errorMsg.classList.add('show');
-        submitBtn.textContent = 'Register Now';
-        submitBtn.disabled = false;
-    }
+     } catch (err) {
+    errorMsg.innerHTML = 'Error: ' + (err.message || 'Unknown') + '<br>Type: ' + err.name;
+    errorMsg.classList.add('show');
+    submitBtn.textContent = 'Register Now';
+    submitBtn.disabled = false;
+    console.error('Full error:', err);
+}
 });
 </script>
 
